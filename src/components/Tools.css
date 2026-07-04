@@ -1,0 +1,79 @@
+/* ── Tools Marquee ─────────────────────────────────── */
+
+.marquee-track:hover .marquee-scroll {
+  animation-play-state: paused;
+}
+
+.marquee-scroll {
+  display: inline-flex;
+  gap: 3rem;
+  padding: 0 2rem;
+  will-change: transform;
+}
+
+.marquee-left {
+  animation: scroll-left 60s linear infinite;
+}
+
+.marquee-right {
+  animation: scroll-right 55s linear infinite;
+}
+
+@keyframes scroll-left {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.marquee-item {
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  color: rgba(var(--brand-color, 255, 255, 255), 1);
+  transition: text-shadow 0.3s ease;
+}
+
+.marquee-item:hover {
+  text-shadow: 0 0 12px rgba(var(--brand-color, 255, 255, 255), 0.8);
+}
+
+/* ── HUD Idle Pulse (Breathing Background Nodes) ── */
+@keyframes idlePulse {
+  0%, 100% {
+    opacity: 0.02;
+  }
+  50% {
+    opacity: 0.04;
+  }
+}
+
+.bg-icon {
+  animation: idlePulse 5s ease-in-out infinite;
+}
+
+/* Natural stagger for ping-pong pulse */
+.bg-icon-1 { animation-delay: 0s; }
+.bg-icon-2 { animation-delay: 1.2s; }
+.bg-icon-3 { animation-delay: 2.4s; }
+.bg-icon-4 { animation-delay: 0.6s; }
+.bg-icon-5 { animation-delay: 3.1s; }
+.bg-icon-6 { animation-delay: 1.8s; }

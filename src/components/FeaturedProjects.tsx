@@ -1,0 +1,235 @@
+import { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExternalLink, GithubIcon, ChevronLeft, ChevronRight, X, Play } from 'lucide-react';
+import { useAntiGravity } from '../hooks/useAntiGravity';
+
+const projects = [
+  {
+    title: "Fake News Detection System",
+    description: "An end-to-end NLP application to classify news articles as real or fake, combining classic ML with a clean FastAPI backend for real-world usability.",
+    bullets: [
+      "Built a text preprocessing pipeline with tokenization, stopword removal, stemming, and TF-IDF vectorization for feature extraction.",
+      "Trained and evaluated a Logistic Regression model with Scikit-learn, achieving reliable classification performance on news datasets.",
+      "Developed REST APIs with FastAPI and integrated SQLite for prediction history and news verification."
+    ],
+    stack: ["Python", "FastAPI", "Machine Learning", "NLP", "SQLite"],
+    repo: "https://github.com/DivyanshPoothiya/Fake-News-Detector",
+    live: "",
+    images: [
+      '/projects/pro_ch_1.png',
+      '/projects/pro_ch_2.png',
+      '/projects/pro_ch_3.png',
+      '/projects/pro_ch_4.png'
+    ]
+  },
+  {
+    title: "Hand Gesture Emotion Recognition",
+    description: "A real-time hand gesture recognition system that classifies user emotions using computer vision and machine learning, built for live webcam input.",
+    bullets: [
+      "Collected and processed gesture datasets across Happy, Sad, Angry, Neutral, and Calm emotion categories.",
+      "Implemented hand landmark detection using MediaPipe and extracted gesture features for model training.",
+      "Built a real-time prediction pipeline with OpenCV, enabling live gesture recognition through webcam input."
+    ],
+    stack: ["Python", "OpenCV", "MediaPipe", "Machine Learning"],
+    repo: "https://github.com/DivyanshPoothiya/Hand-Gesture-Emotion-Recognition",
+    live: "",
+    images: [
+      '/projects/pro_loan_1.png',
+      '/projects/pro_loan_2.png',
+      '/projects/pro_loan_3.png',
+      '/projects/pro_loan_4.png'
+    ]
+  }
+];
+
+const ProjectFeature = ({ project }: { project: typeof projects[0] }) => {
+  const [isSpread, setIsSpread] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const stackParentRef = useRef<HTMLDivElement>(null);
+
+  useAntiGravity([stackParentRef], {
+    rangeX: 12,
+    rangeY: 12,
+    rangeRot: 1.5,
+    isPaused: isSpread
+  });
+
+  const images = project.images || [
+    '/placeholder.jpg',
+    '/placeholder.jpg',
+    '/placeholder.jpg',
+    '/placeholder.jpg'
+  ];
+
+  const getSpreadAnimation = (index: number, total: number) => {
+    if (total === 3) {
+      if (index === 0) return { top: "0%", left: "0%", width: "100%", height: "49%", rotate: 0 };
+      if (index === 1) return { top: "51%", left: "0%", width: "49%", height: "49%", rotate: 0 };
+      if (index === 2) return { top: "51%", left: "51%", width: "49%", height: "49%", rotate: 0 };
+    }
+    if (index === 0) return { top: "0%", left: "0%", width: "49%", height: "49%", rotate: 0 };
+    if (index === 1) return { top: "0%", left: "51%", width: "49%", height: "49%", rotate: 0 };
+    if (index === 2) return { top: "51%", left: "0%", width: "49%", height: "49%", rotate: 0 };
+    if (index === 3) return { top: "51%", left: "51%", width: "49%", height: "49%", rotate: 0 };
+
+    return { top: "0%", left: "0%", width: "100%", height: "100%", rotate: 0 };
+  };
+
+  const getStackedAnimation = (index: number, total: number) => {
+    return {
+      top: "10%", left: "10%", width: "80%", height: "80%",
+      rotate: index * 4 - (total * 2),
+      zIndex: total - index
+    };
+  };
+
+  return (
+    <div className="flex flex-col lg:flex-row w-full min-h-[70vh] items-stretch border-b border-white/5 group">
+      <div
+        className="w-full lg:w-[60%] bg-[#0f0f0f] relative overflow-hidden flex items-center justify-center p-4 lg:p-6 border-r border-white/5"
+        onMouseEnter={() => setIsSpread(true)}
+        onMouseLeave={() => setIsSpread(false)}
+      >
+        <div className="absolute inset-0 bg-teal/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        <div
+          ref={stackParentRef}
+          className="relative w-full max-w-6xl aspect-square md:aspect-[4/3]"
+        >
+          {images.map((imgSrc, index) => (
+            <motion.img
+              key={index}
+              src={imgSrc}
+              className="absolute object-cover rounded-md shadow-2xl border border-white/10 cursor-zoom-in"
+              initial={false}
+              animate={isSpread
+                ? getSpreadAnimation(index, images.length)
+                : getStackedAnimation(index, images.length)
+              }
+              style={{ zIndex: isSpread ? 10 : images.length - index }}
+              transition={{ type: "spring", stiffness: 220, damping: 25 }}
+              onClick={() => setLightboxIndex(index)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="w-full lg:w-[40%] bg-charcoal p-8 lg:p-16 flex flex-col justify-center">
+        <h3 className="text-3xl lg:text-5xl font-display font-light text-soft-white mb-6 tracking-tight">
+          {project.title}
+        </h3>
+        <p className="text-soft-white/70 font-sans text-lg lg:text-xl font-light leading-relaxed mb-8">
+          {project.description}
+        </p>
+
+        <ul className="space-y-3 mb-10">
+          {project.bullets.map((bullet, i) => (
+            <li key={i} className="flex items-start text-soft-white/60 font-sans">
+              <span className="block w-1.5 h-1.5 rounded-full bg-teal mt-2.5 mr-4 flex-shrink-0" />
+              <span className="leading-relaxed">{bullet}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex flex-wrap gap-2 mb-12">
+          {project.stack.map((tech, i) => (
+            <span key={i} className="px-3 py-1 text-xs font-sans text-soft-white/50 bg-white/5 border border-white/10 uppercase tracking-widest">
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-6 mt-auto">
+          {project.live && (
+            <a href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-soft-white hover:text-teal transition-colors uppercase tracking-widest text-sm font-semibold">
+              <span>{project.live.includes('youtube.com') || project.live.includes('youtu.be') ? 'Watch Demo' : 'View Live'}</span>
+              {project.live.includes('youtube.com') || project.live.includes('youtu.be') ? <Play size={16} /> : <ExternalLink size={16} />}
+            </a>
+          )}
+          <a href={project.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-soft-white/50 hover:text-soft-white transition-colors uppercase tracking-widest text-sm font-semibold">
+            <span>Source</span>
+            <GithubIcon size={16} />
+          </a>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setLightboxIndex(null)}
+          >
+            <div
+              className="relative flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <motion.img
+                key={lightboxIndex}
+                src={images[lightboxIndex]}
+                className="max-w-[90vw] max-h-[85vh] object-contain drop-shadow-2xl rounded-lg"
+                initial={{ opacity: 0, scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.92 }}
+                transition={{ duration: 0.25 }}
+              />
+            </div>
+
+            <button
+              className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors cursor-pointer"
+              onClick={() => setLightboxIndex(null)}
+            >
+              <X size={28} />
+            </button>
+
+            <button
+              className="absolute left-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#00E0C7] transition-colors cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev === 0 ? images.length - 1 : prev! - 1));
+              }}
+            >
+              <ChevronLeft size={36} />
+            </button>
+
+            <button
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#00E0C7] transition-colors cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev === images.length - 1 ? 0 : prev! + 1));
+              }}
+            >
+              <ChevronRight size={36} />
+            </button>
+
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-sm font-sans tracking-widest">
+              {lightboxIndex + 1} / {images.length}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const FeaturedProjects = () => {
+  return (
+    <section id="projects" className="bg-charcoal w-full border-t border-white/5 relative z-20">
+      <div className="py-24 px-8 lg:px-16 border-b border-white/5">
+        <h2 className="font-display text-4xl md:text-5xl font-light text-soft-white inline-block">
+          Featured Work
+        </h2>
+      </div>
+
+      <div className="flex flex-col w-full">
+        {projects.map((project, i) => (
+          <ProjectFeature key={i} project={project} />
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default FeaturedProjects;

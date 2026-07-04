@@ -1,0 +1,51 @@
+.neural-hud-container {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    pointer-events: none;
+    /* Lets the user click through it if needed */
+}
+
+.neural-canvas {
+    width: 250px;
+    /* Scaled down perfectly */
+    height: 110px;
+    background: transparent;
+    border-radius: 8px;
+    /* Optional: gives it a subtle glassmorphism border */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.neural-terminal {
+    font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
+    font-size: 0.75rem;
+    color: #6e6e80;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    letter-spacing: 0.05em;
+}
+
+.hud-line {
+    margin: 0;
+}
+
+.highlight {
+    color: #00E0C7;
+    /* Your neon yellow */
+}
+
+.blinking-cursor {
+    color: #00E0C7;
+    animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}

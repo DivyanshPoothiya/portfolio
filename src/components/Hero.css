@@ -1,0 +1,333 @@
+/* ============================================
+   HERO — 3-Layer Architecture + GSAP Scroll Reveal
+   L1: Kinetic text  |  L2: Image mask  |  L3: UI
+   Background: #080808
+   ============================================ */
+
+/* ── Hero wrapper (pinned by GSAP) ── */
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 10rem;
+  background-color: #080808;
+  overflow: hidden;
+}
+
+/* ════════════════════════════════════════════
+   LAYER 1: KINETIC TYPOGRAPHY BACKGROUND
+   position: fixed | z-index: 1 | overflow: hidden
+   Animated by GSAP (no CSS keyframes needed)
+   ════════════════════════════════════════════ */
+.hero-L1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  overflow: hidden;
+  background-color: #080808;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.1rem;
+  will-change: transform;
+}
+
+/* ── Topographic Contour Lines ── */
+.hero-topo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.hero-topo__path {
+  fill: none;
+  stroke: #1a1a1a;
+  stroke-width: 1.2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  will-change: transform;
+}
+
+.hero-L1__track {
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.hero-L1__text {
+  display: inline-block;
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 5.5vw, 5.5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #00E0C7;
+  opacity: 0.04;
+  user-select: none;
+  will-change: transform;
+}
+
+/* ════════════════════════════════════════════
+   LAYER 2: IMAGE MASK WRAPPER
+   Solid #080808 bg hides L1 on load.
+   GSAP animates clip-path: inset(...) to reveal.
+   ════════════════════════════════════════════ */
+.hero-L2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  background-color: #080808;
+  overflow: hidden;
+
+  clip-path: inset(0% 0% 0% 0%);
+  will-change: clip-path;
+}
+
+.hero-L2__portrait {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  transform-origin: bottom center;
+  width: auto;
+  height: 95vh;
+  object-fit: cover;
+  object-position: center 15%;
+  filter: drop-shadow(0 0 100px rgba(0, 0, 0, 0.85));
+}
+
+/* Dark overlay — starts fully transparent, GSAP fades to 50% */
+.hero-L2__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+/* ════════════════════════════════════════════
+   LAYER 3: FOREGROUND UI
+   ════════════════════════════════════════════ */
+.hero-L3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ── Gradient Fade — Smooth bottom edge blending ── */
+.hero-bottom-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20vh;
+  background: linear-gradient(to bottom, transparent, #121212);
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* ════════════════════════════════════════════
+   YOLO BOUNDING BOX — Bottom Left
+   ════════════════════════════════════════════ */
+.hero-yolo {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  min-width: 260px;
+  padding: 1.1rem 1.3rem;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  translate: var(--px, 0) var(--py, 0);
+}
+
+.hero-yolo__corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+}
+
+.hero-yolo__corner--tl {
+  top: 0;
+  left: 0;
+  border-top: 2px solid #00E0C7;
+  border-left: 2px solid #00E0C7;
+}
+
+.hero-yolo__corner--tr {
+  top: 0;
+  right: 0;
+  border-top: 2px solid #00E0C7;
+  border-right: 2px solid #00E0C7;
+}
+
+.hero-yolo__corner--bl {
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid #00E0C7;
+  border-left: 2px solid #00E0C7;
+}
+
+.hero-yolo__corner--br {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid #00E0C7;
+  border-right: 2px solid #00E0C7;
+}
+
+.hero-yolo__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hero-yolo__row {
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.04em;
+}
+
+.hero-yolo__key {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.hero-yolo__val {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.hero-yolo__val--neon {
+  color: #00E0C7;
+}
+
+/* ════════════════════════════════════════════
+   SIGNATURE CONTAINER — Centered
+   ════════════════════════════════════════════ */
+.hero-signature {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 85vw;
+  max-width: 1200px;
+  height: auto;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  will-change: transform;
+}
+
+/* Injected SVG and path base styles */
+.hero-signature svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hero-signature path {
+  fill: transparent;
+  stroke: #00E0C7;
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(0, 224, 199, 0.4));
+}
+
+/* ── Scroll Cue ── */
+.hero-scroll-cue {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  will-change: transform, opacity;
+  translate: var(--px, 0) var(--py, 0);
+}
+
+.hero-scroll-cue__text {
+  font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.hero-scroll-cue__line {
+  width: 1px;
+  height: 2.5rem;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+}
+
+/* ════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .hero-L1__text {
+    font-size: clamp(2.5rem, 14vw, 5rem);
+  }
+
+  .hero-L2__portrait {
+    height: 62vh;
+  }
+
+  .hero-nav {
+    padding: 1.25rem 1.25rem;
+  }
+
+  .hero-nav__name {
+    font-size: 0.9rem;
+  }
+
+  .hero-nav__resume {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.55rem;
+  }
+
+  .hero-yolo {
+    bottom: 1.25rem;
+    left: 1.25rem;
+    min-width: auto;
+    padding: 0.9rem 1rem;
+  }
+
+  .hero-yolo__row {
+    font-size: 0.6rem;
+  }
+
+  .hero-yolo__corner {
+    width: 12px;
+    height: 12px;
+  }
+
+  .hero-signature {
+    width: 80vw;
+    height: 22vh;
+  }
+
+  .hero-scroll-cue {
+    bottom: 1.25rem;
+  }
+}
