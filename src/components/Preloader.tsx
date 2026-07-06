@@ -27,7 +27,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
     const cubes = document.querySelectorAll('.cube');
     const sockets = document.querySelectorAll('.socket');
 
-    // Initialize the P with GSAP (no CSS transform conflict)
+    // Initialize the DP with GSAP (no CSS transform conflict)
     gsap.set('.preloader-p-text', { xPercent: -50, yPercent: -50, opacity: 0 });
 
     // Position cubes and sockets at their scattered spawn points
@@ -268,7 +268,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           lineHeight: 1
         }}
       >
-        P
+        DP
       </div>
 
       {/* Logo Frame — unified white border that replaces the grid */}
